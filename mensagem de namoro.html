@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Mensagem de Amor</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: linear-gradient(135deg, #ffbfd9, #ff7ca1);
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .background-hearts {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      top: 0; left: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .background-hearts span {
+      position: absolute;
+      display: block;
+      width: 15px;
+      height: 15px;
+      background: #fff0f5;
+      opacity: 0.7;
+      transform-origin: center;
+      clip-path: polygon(50% 0%, 61% 17%, 98% 35%, 79% 95%, 50% 82%, 21% 95%, 2% 35%, 39% 17%);
+      animation-name: drift;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+    }
+    @keyframes drift {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0.7;}
+      50% { opacity: 0.2;}
+      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0;}
+    }
+
+    .container {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      user-select: text;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .choice-container {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 10px;
+    }
+
+    button {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.8rem;
+      border: none;
+      padding: 12px 40px;
+      border-radius: 30px;
+      cursor: pointer;
+      background: #ff6b81;
+      color: white;
+      box-shadow: 0 5px 15px rgba(255, 107, 129, 0.5);
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    button:hover {
+      background: #ff8fa2;
+    }
+
+    #questionText {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.4rem;
+      color: #fff;
+      text-shadow: 0 0 8px #ff6b81;
+      max-width: 90vw;
+      user-select: text;
+    }
+
+    #namesText {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.4rem;
+      color: #fff;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px #ff6b81;
+      user-select: text;
+      display: none;
+      max-width: 90vw;
+      word-wrap: break-word;
+    }
+
+    #footerText {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.8rem;
+      color: #fff;
+      margin-top: 15px;
+      text-shadow: 0 0 10px #ff6b81;
+      user-select: text;
+      display: none;
+      max-width: 90vw;
+      word-wrap: break-word;
+    }
+
+    #heartSection {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      display: none;
+      margin-top: 15px;
+    }
+
+    svg {
+      width: 400px;
+      height: 400px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .heart-path {
+      fill: none;
+      stroke: #ff2e6a;
+      stroke-width: 5;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      stroke-dasharray: 650;
+      stroke-dashoffset: 650;
+      animation: drawHeart 3s forwards ease-in-out;
+    }
+    @keyframes drawHeart {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+    .heart-fill {
+      fill: #ff2e6a;
+      opacity: 0;
+      animation: fillHeart 1.5s ease-in-out 3s forwards;
+    }
+    @keyframes fillHeart {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .text-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 75%;
+      max-height: 65%;
+      overflow-y: auto;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 1.05rem;
+      line-height: 1.4;
+      user-select: text;
+      white-space: pre-line;
+      text-shadow: 0 0 6px #ff7297cc;
+      -webkit-overflow-scrolling: touch;
+      padding: 0 10px;
+      box-sizing: border-box;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+    }
+
+    .text-container::-webkit-scrollbar {
+      width: 6px;
+    }
+    .text-container::-webkit-scrollbar-thumb {
+      background: #ff6b81cc;
+      border-radius: 3px;
+    }
+
+    @media (max-width: 400px) {
+      #heartSection {
+        width: 90vw;
+        height: 90vw;
+      }
+      svg {
+        width: 90vw;
+        height: 90vw;
+      }
+      .text-container {
+        font-size: 0.9rem;
+        max-height: 50%;
+      }
+      button {
+        font-size: 1.4rem;
+        padding: 10px 30px;
+      }
+      #questionText {
+        font-size: 2rem;
+      }
+      #namesText {
+        font-size: 2rem;
+      }
+      #footerText {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background-hearts" aria-hidden="true"></div>
+
+  <main class="container" role="main" aria-label="Mensagem de amor interativa">
+    <div id="choiceSection" aria-live="polite" aria-atomic="true" aria-describedby="questionText">
+      <p id="questionText">Você deseja ler a mensagem?</p>
+      <div class="choice-container">
+        <button id="buttonSim" aria-label="Sim">Sim</button>
+        <button id="buttonNao" aria-label="Não">Não</button>
+      </div>
+    </div>
+
+    <p id="namesText" aria-hidden="true">Gabriel X Larissa</p>
+
+    <section id="heartSection" aria-live="polite" aria-atomic="true">
+      <svg viewBox="0 0 512 512" role="img" aria-label="Coração animado">
+        <path class="heart-path" d="M471.701 73.68c-54.085-51.87-138.19-51.927-192.172-.194l-10.672 10.223-10.673-10.223c-53.925-51.752-138.23-51.626-192.172.194C18.623 108.212 16 144.19 16 176c0 33.82 14.9 67.147 41.393 91.593l178.224 174.224c7.81 7.632 20.485 7.632 28.295 0l178.223-174.224C481.1 243.147 496 209.82 496 176c0-31.81-2.623-67.788-24.299-102.32z"/>
+        <path class="heart-fill" d="M471.701 73.68c-54.085-51.87-138.19-51.927-192.172-.194l-10.672 10.223-10.673-10.223c-53.925-51.752-138.23-51.626-192.172.194C18.623 108.212 16 144.19 16 176c0 33.82 14.9 67.147 41.393 91.593l178.224 174.224c7.81 7.632 20.485 7.632 28.295 0l178.223-174.224C481.1 243.147 496 209.82 496 176c0-31.81-2.623-67.788-24.299-102.32z"/>
+      </svg>
+      <div class="text-container" id="messageText" tabindex="0">
+        ei meu amor, sei que estamos em momentos difíceis, e às vezes a gente se desentende, estou sempre precisando melhorar minha forma de falar e acaba que eu ainda erro com você,
+        mas quero que saiba que eu te amo e sempre amarei, você é incrível, feliz 7 meses
+      </div>
+    </section>
+
+    <p id="footerText" aria-hidden="true">Feliz 7 meses</p>
+  </main>
+
+  <script>
+    const backgroundHearts = document.querySelector('.background-hearts');
+    const heartCount = 40;
+
+    function randomRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    for (let i = 0; i < heartCount; i++) {
+      const heart = document.createElement('span');
+      heart.style.left = `${randomRange(0, 100)}vw`;
+      heart.style.top = '100vh';
+      heart.style.width = `${randomRange(10, 20)}px`;
+      heart.style.height = heart.style.width;
+      heart.style.animationDuration = `${randomRange(8, 15)}s`;
+      heart.style.animationDelay = `${randomRange(0, 15)}s`;
+      heart.style.opacity = Math.random() * 0.6 + 0.2;
+      backgroundHearts.appendChild(heart);
+    }
+
+    const buttonSim = document.getElementById('buttonSim');
+    const buttonNao = document.getElementById('buttonNao');
+    const choiceSection = document.getElementById('choiceSection');
+    const heartSection = document.getElementById('heartSection');
+    const messageText = document.getElementById('messageText');
+    const namesText = document.getElementById('namesText');
+    const footerText = document.getElementById('footerText');
+
+    buttonSim.addEventListener('click', () => {
+      choiceSection.style.display = 'none';
+      heartSection.style.display = 'block';
+      namesText.style.display = 'block';
+      footerText.style.display = 'block';
+      messageText.style.opacity = '0';
+
+      setTimeout(() => {
+        messageText.style.transition = 'opacity 1.5s ease-in-out';
+        messageText.style.opacity = '1';
+      }, 4500);
+    });
+
+    buttonNao.addEventListener('click', () => {
+      choiceSection.innerHTML = '<p style="font-family: Pacifico, cursive; font-size: 1.8rem; color: #fff; text-shadow: 0 0 8px #ff6b81;">Tudo bem, quando quiser estarei aqui ❤️</p>';
+    });
+  </script>
+</body>
+</html>
+
